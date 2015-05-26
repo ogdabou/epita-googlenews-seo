@@ -2,8 +2,10 @@
 
 ## TL;DR
 
-```/install.sh```
-```scrapy crawl gnews```
+```
+    sudo install.sh
+    scrapy crawl gnews
+```
 
 ## Requirements
 
