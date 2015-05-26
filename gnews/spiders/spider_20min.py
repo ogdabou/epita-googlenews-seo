@@ -3,7 +3,7 @@ from scrapy.selector import HtmlXPathSelector, Selector
 
 
 class LeMondeSpider(CrawlSpider):
-    name = '20minspider'
+    name = '20minutesspider'
     allowed_domains = ['20minutes.fr']
     start_urls = [
         'http://www.20minutes.fr/high-tech/1616287-20150526-helios-premier-casque-energie-solaire']
