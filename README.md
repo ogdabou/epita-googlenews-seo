@@ -1,5 +1,10 @@
 # epita-googlenews-seo
 
+## TL;DR
+
+```/install.sh```
+```scrapy crawl gnews```
+
 ## Requirements
 
 * python 2.7 or higher
