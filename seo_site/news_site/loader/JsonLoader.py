@@ -10,7 +10,7 @@ class JsonLoader():
     def load(self):
         jsonObject = json.load(open("/home/ogdabou/git/gnews/output.json"))
         jsonObject = jsonObject[0]
-        return jsonObject;
+        return jsonObject
 
     def transform(self, jsonData):
         print "transforming"
