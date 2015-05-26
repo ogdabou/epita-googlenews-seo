@@ -6,9 +6,9 @@
 # 
 # -Sid
  
-from scrapy.spider import BaseSpider
+from scrapy.spider import Spider
  
-from scrapy.selector import HtmlXPathSelector
+from scrapy.selector import Selector
 from scrapy.selector import XmlXPathSelector
 from scrapy.http import Request
 from scrapy.item import Item, Field
@@ -18,7 +18,7 @@ import urlparse
  
  
  
-class RSSSpider(BaseSpider):
+class RSSSpider(Spider):
     name = "gnews"
     allowed_domain = ["news.google.com"]
     start_urls = [
@@ -33,17 +33,15 @@ class RSSSpider(BaseSpider):
  
     def parse(self, response):
         #recieve Parsed urls here...
-        hxs = HtmlXPathSelector(response)
+        hxs = Selector(response)
         base_url = response.url;
         res = urlparse.urlparse(base_url);
         self.allowed_domain = [res.netloc];
  
  
-        print ('**********BASE URL********',base_url);
-        links = hxs.select('//a/@href').extract();
+        links = hxs.xpath('//a/@href').extract();
         self.num_links = len(links);
         self.num_links_proc = 0;
-        print 'Number of links TBP %s'%(self.num_links);
         for url in links:
             #TODO: Inform mongo about progress
             if(self._http_pattern.match(url)):
@@ -61,6 +59,7 @@ class RSSSpider(BaseSpider):
             else:
                 #relative URL we should try to append the domain and fetch the page
                 yield Request(urlparse.urljoin(base_url, url), callback=self.first_level_links);
+
     # This page will process the first level links
     def first_level_links(self, response):
         print('****First Level links:',response.url);
@@ -71,15 +70,19 @@ class RSSSpider(BaseSpider):
     # detect an RSS Feed and return a RssFeedItem Object	
     def detect_feed(self, response):
         """Just detects the feed in the links and returns an Item"""
-        xxs = XmlXPathSelector(response);
+        xxs = Selector(response);
         '''Need to tweak the feedparser lib to just use the headers from response instead of 
         d/l the feed page again, rather than d/l it again 
         '''
- 
-        if any(xxs.select("/%s" % feed_type) for feed_type in ['rss', 'feed', 'xml', 'rdf']):
+
+       # feed_type = xxs.xpath("/%s" % feed_type)
+       # print 'TYYYYYPE %s'(feed_type)
+
+        if any(xxs.xpath("/%s" % feed_type) for feed_type in ['rss', 'feed', 'xml', 'rdf']):
             try:
                 rssFeed = feedparser.parse(response.url);
-                return  self.extract_feed(rssFeed)
+                items = self.extract_feed(rssFeed)
+                return  items
             except:
                 raise Exception('Exception while parsing/extracting the feed')	
  
@@ -112,11 +115,12 @@ class RSSSpider(BaseSpider):
                 for entry_dict in entry_list:
                     if r.has_key('entries') == False:
                         r['entries'] = list();
+                    entry_item.update(entry_dict)
  
-                    if 'published_parsed' in entry_dict:
-                        entry_item.update({ 'published':date_handler(entry_dict('published_parsed'))});
-                    else:
-                        entry_item.update(entry_dict);
+                   # if 'published_parsed' in entry_dict:
+                    #    entry_item.update({ 'published':date_handler(entry_dict('published_parsed'))});
+                    #else:
+                    #    entry_item.update(entry_dict);
                     r['entries'].append(entry_item);
             if r['entries']:
                     return r;			
