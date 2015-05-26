@@ -7,6 +7,11 @@
     scrapy crawl gnews
 ```
 
+## DEBUGGING with PyCharm
+
+The script used for debug purpose is ```start.py```  
+Follow the instruction of the first answer   http://stackoverflow.com/questions/21788939/how-to-use-pycharm-to-debug-scrapy-projects
+
 ## Requirements
 
 * python 2.7 or higher
