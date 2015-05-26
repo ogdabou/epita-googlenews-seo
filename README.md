@@ -26,3 +26,8 @@ You need a python IDE like [PyCharm](https://www.jetbrains.com/pycharm/)
 ## Running
 
 ```scrapy crawl gnews```
+
+## Tests
+
+High tech Google News cluster
+Peluche connectée google feed
