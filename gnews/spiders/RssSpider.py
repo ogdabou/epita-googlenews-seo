@@ -1,6 +1,8 @@
 __author__ = 'ogdabou'
 
 from scrapy.spider import Spider
+from gnews.models.Article import Article
+from gnews.models.Feed import Feed
 import feedparser
 
 class RssSpider(Spider):
@@ -10,12 +12,15 @@ class RssSpider(Spider):
         'https://news.google.com/news?pz=1&cf=all&ned=fr&hl=fr&topic=t&ncl=dw795LYCcKHgS9MAhRGZSfvMEVTWM&output=rss']
 
     def parse(self, response):
-        ## feedParser returns an entry list with all the details
+        # feedParser returns an entry list with all the details
         rssFeed = feedparser.parse(self.start_urls[0])
-
+        feed = Feed()
+        feed['articles'] = []
         for rssArticleRow in rssFeed.entries:
-            print rssArticleRow
-            lol = Article()
-
-        print("Parsing feed %s", self.start_urls[0])
-        print(rssFeed)
+            article = Article()
+            article['title'] = rssArticleRow['title']
+            article['url'] = rssArticleRow['link']
+            article['summary'] = rssArticleRow['summary']
+            feed['articles'].append(dict(article))
+            print feed
+        yield feed
