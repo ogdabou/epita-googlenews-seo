@@ -22,5 +22,4 @@ class RssSpider(Spider):
             article['url'] = rssArticleRow['link']
             article['summary'] = rssArticleRow['summary']
             feed['articles'].append(dict(article))
-            print feed
         yield feed
