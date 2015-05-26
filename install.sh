@@ -13,3 +13,7 @@ cd feedparser
 sudo python setup.py install
 cd ..
 sudo rm -rf feedparser
+
+sudo apt-get install python-pip
+
+sudo pip install Django
