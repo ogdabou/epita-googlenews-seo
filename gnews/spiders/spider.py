@@ -66,7 +66,9 @@ class RSSSpider(Spider):
         r = self.detect_feed(response);
         if r:
             yield r;
-        pass			
+        pass
+
+
     # detect an RSS Feed and return a RssFeedItem Object	
     def detect_feed(self, response):
         """Just detects the feed in the links and returns an Item"""
@@ -102,6 +104,7 @@ class RSSSpider(Spider):
                 r['summary'] = parsed_feed.feed.subtitle 
             if 'link' in parsed_feed.feed:
                 r['link'] = parsed_feed.feed.link
+            print("PARSING FOR FEED %s", r['title'])
  
             # entries gathered as list(s) of key value pairs. Each list is an entry item
             entry_lists= [[
@@ -109,18 +112,23 @@ class RSSSpider(Spider):
                 ]for entry in parsed_feed.entries if hasattr(entry,'title') and  hasattr(entry,'link') and hasattr(entry,'summary') 
             ]
  
-            for entry_list in entry_lists:
+            for entry_attribute_list in entry_lists:
                 entry_item = RssEntryItem();
- 
-                for entry_dict in entry_list:
+                entry_item.update(entry_attribute_list[1]["title"])
+                #entry_item.title = entry_attribute_list[1]["published_parsed"]
+                entry_item.summary = entry_attribute_list[2]["summary"]
+                entry_item.link = entry_attribute_list[3]["link"]
+
+                for entry_dict in entry_attribute_list:
                     if r.has_key('entries') == False:
                         r['entries'] = list();
-                    entry_item.update(entry_dict)
+
+                    entry_item.title = entry_dict["title"]
  
-                   # if 'published_parsed' in entry_dict:
-                    #    entry_item.update({ 'published':date_handler(entry_dict('published_parsed'))});
-                    #else:
-                    #    entry_item.update(entry_dict);
+                    if 'published_parsed' in entry_dict:
+                        entry_item.update({ 'published':date_handler(entry_dict('published_parsed'))});
+                    else:
+                        entry_item.update(entry_dict);
                     r['entries'].append(entry_item);
             if r['entries']:
                     return r;			
