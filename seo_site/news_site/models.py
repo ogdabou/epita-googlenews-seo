@@ -8,4 +8,4 @@ class Article(models.Model):
     description_text = models.CharField(max_length=200);
     content_text = models.TextField();
     public_date = models.DateTimeField('date published');
-    
+
