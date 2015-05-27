@@ -12,7 +12,7 @@ class LeMondeSpider(CrawlSpider):
 
         result =[]
         for node in response.xpath("//p[not(@class)]/text() | //p/em/text()").extract():
-            result.append(node)
+            #result.append(node)
             print node
 
 
