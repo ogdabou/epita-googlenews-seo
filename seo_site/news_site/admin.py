@@ -8,9 +8,13 @@ from .FeedParser import FeedParser
 
 def update_price(modeladmin, request, queryset):
     feedparser = FeedParser()
-    articles = []
+
+
     for feed in queryset:
-        articles.append(feedparser.parse(feed.url))
+        articles = feedparser.parse(feed.url)
+
+        for article in articles:
+            article.save()
         modeladmin.message_user(request, ("Successfully crawled %d / %d feeds") % (len(queryset), len(articles)), messages.SUCCESS)
 
 update_price.short_description = 'Update price of selected rows'
