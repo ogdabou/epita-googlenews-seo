@@ -5,6 +5,7 @@ from django.db import models
 # Create your models here.
 
 class Article(models.Model):
+    url = models.TextField();
     title_text = models.CharField(max_length=200);
     description_text = models.CharField(max_length=200);
     content_text = models.TextField();

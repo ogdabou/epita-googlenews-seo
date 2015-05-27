@@ -1,15 +1,18 @@
 from django.contrib import admin
 
 from django.contrib import messages
-
+from .forms import FeedForm
 from .models import Article, Feed
+from .FeedParser import FeedParser
 
-def coucouHiboux():
-    print "coucouHiboux"
 
 def update_price(modeladmin, request, queryset):
-    print "lol"
-    modeladmin.message_user(request, ("Successfully updated price for %d rows") % (45,), messages.SUCCESS)
+    feedparser = FeedParser()
+    articles = []
+    for feed in queryset:
+        articles.append(feedparser.parse(feed.url))
+        modeladmin.message_user(request, ("Successfully crawled %d / %d feeds") % (len(queryset), len(articles)), messages.SUCCESS)
+
 update_price.short_description = 'Update price of selected rows'
 
 class ArticleAdmin(admin.ModelAdmin):
