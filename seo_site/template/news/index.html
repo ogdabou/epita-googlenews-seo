@@ -1,0 +1,12 @@
+{% if articles %}
+	{% for article in articles %}
+		<h1>{{article.title_text}}</h1>
+		<p>
+			{{article.description_text}}
+		</p>
+		
+		<p>
+			{{article.content_text}}
+		</p>
+	{% endfor %}
+{% endif%}
