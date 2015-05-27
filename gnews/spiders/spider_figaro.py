@@ -1,5 +1,4 @@
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from scrapy.selector import HtmlXPathSelector, Selector
 
 
 class LeMondeSpider(CrawlSpider):

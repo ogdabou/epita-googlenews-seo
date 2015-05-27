@@ -12,5 +12,6 @@ class Article(models.Model):
     
     def __str__(self):              
         return self.title_text
-    
-    
+
+class Feed(models.Model):
+    url = models.CharField(max_length=200)
