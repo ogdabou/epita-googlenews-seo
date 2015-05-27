@@ -17,6 +17,7 @@ def index(request):
     return HttpResponse(template.render(context));
 
 
+
 def addRss (request):
     template = loader.get_template('admin/add/rss.html')
     jsonLoader = JsonLoader()
@@ -26,3 +27,4 @@ def addRss (request):
         'articles' : articles
     })
     return HttpResponse(template.render(context))
+
