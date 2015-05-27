@@ -7,6 +7,10 @@
     scrapy crawl gnews
 ```
 
+## Links
+
+* [N-grams extraction](http://locallyoptimal.com/blog/2013/01/20/elegant-n-gram-generation-in-python/)
+
 ## DEBUGGING with PyCharm
 
 The script used for debug purpose is ```start.py```  
