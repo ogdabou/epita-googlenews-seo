@@ -11,7 +11,7 @@ class FeedParser(HTMLParser):
     def handle_data(self, d):
         self.fed.append(d)
     def get_data(self):
-        return ''.join(self.fed)
+        return u' '.join(self.fed)
 
     def parse(self, url):
         rssFeed = feedparser.parse(url)
