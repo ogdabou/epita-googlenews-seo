@@ -9,7 +9,6 @@ from .FeedParser import FeedParser
 def update_price(modeladmin, request, queryset):
     feedparser = FeedParser()
 
-
     for feed in queryset:
         articles = feedparser.parse(feed.url)
 
@@ -17,7 +16,7 @@ def update_price(modeladmin, request, queryset):
             article.save()
         modeladmin.message_user(request, ("Successfully crawled %d / %d feeds") % (len(queryset), len(articles)), messages.SUCCESS)
 
-update_price.short_description = 'Update price of selected rows'
+update_price.short_description = 'Crawl RSS feed'
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('title_text', 'description_text', 'public_date')
