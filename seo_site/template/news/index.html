@@ -1,12 +1,26 @@
-{% if articles %}
-	{% for article in articles %}
-		<h1>{{article.title_text}}</h1>
-		<p>
-			{{article.description_text}}
-		</p>
-		
-		<p>
-			{{article.content_text}}
-		</p>
-	{% endfor %}
-{% endif%}
+{% extends "news/base.html" %}
+
+{% block title %}Google news{% endblock %}
+
+{% block branding %}
+	<h1>Indago news</h1>
+{% endblock %}
+{% block content %}
+	{% if articles %}
+		<div id="changelist" class="module filtered">
+		{% for article in articles %}
+			<h1><a href="#">{{article.title_text}}</a></h1>
+			<p>
+				{{article.description_text}}
+			</p>
+			
+			<p>
+				{{article.content_text}}
+			</p>
+			<hr>
+		{% endfor %}
+		</div>
+	{% endif%}
+{% endblock %}
+
+
