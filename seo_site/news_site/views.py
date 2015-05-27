@@ -1,12 +1,19 @@
 from django.http import HttpResponse
-
+from django.core.context_processors import request
+from django.template import RequestContext, loader
+from .models import Article
+from aptsources.distinfo import Template
 from .JsonLoader import JsonLoader
 
 
 # Create your views here.
 
 def index (request):
-    jsonR = JsonLoader()
-    datas = jsonR.load()
-    jsonR.transform(datas)
-    return HttpResponse("Hello world, this is index")
+    template = loader.get_template('admin/add/rss.html')
+    jsonLoader = JsonLoader()
+    datas = jsonLoader.load()
+    articles = jsonLoader.transform(datas)
+    context = RequestContext(request, {
+        'articles' : articles
+    })
+    return HttpResponse(template.render(context))
