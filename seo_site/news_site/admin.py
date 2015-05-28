@@ -19,7 +19,8 @@ def update_price(modeladmin, request, queryset):
             g = Goose()
             g_article = g.extract(article.url)
             article.content_text = g_article.cleaned_text
-            article.img_url = g_article.top_image.src
+            if g_article.top_image is not None:
+                article.img_url = g_article.top_image.src
             article.save()
             ngram.computeNGrams(article.description_text, 2)
         modeladmin.message_user(request, ("Successfully crawled %d / %d feeds") % (len(queryset), len(articles)), messages.SUCCESS)
