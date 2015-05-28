@@ -1,3 +1,5 @@
+from nltk.tokenize import word_tokenize
+
 class stopWord:
     
     def stop_little_words(self, chaine):
@@ -20,7 +22,7 @@ class stopWord:
                      "who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd",
                      "you'll","you're","you've"];
 
-        words = chaine.split(" ")
+        words = word_tokenize(chaine)
         for word in stop_word:
             if word in chaine:
                 #chaine = chaine.remove(word);

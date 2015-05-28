@@ -1,3 +1,4 @@
 .idea
 *.pyc
+seo_site/nltk_data
 feedparser
