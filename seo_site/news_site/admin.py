@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import FeedForm
 from .models import Article, Feed
 from .FeedParser import FeedParser
+from .KeyWordsProcessor import KeyWordsProcessor
 from .NGram import NGram
 from goose import Goose
 
@@ -17,6 +18,7 @@ def update_price(modeladmin, request, queryset):
 
         for x in range(0, len(articles), 1):
             article = articles[x]
+            article.feed_id = feed.id
             g = Goose()
             g_article = g.extract(article.url)
             article.content_text = g_article.cleaned_text
@@ -28,17 +30,23 @@ def update_price(modeladmin, request, queryset):
 
 update_price.short_description = 'Crawl RSS feed'
 
+def compute_keywords(modeladmin, request, feeds):
+    keyWordsProcessor = KeyWordsProcessor()
+    for feed in feeds:
+        keyWordsProcessor.process(feed)
+
+compute_keywords.short_description = 'Compute keywords on feed clusters'
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title_text', 'description_text', 'public_date', 'content_text', 'img_url',)
+    list_display = ('feed_id', 'title_text', 'description_text', 'public_date', 'content_text', 'img_url',)
     list_filter = ['public_date']
     search_fields = ['title_text']
 
 
 class FeedAdmin(admin.ModelAdmin):
-    list_display = ('url',)
+    list_display = ('id', 'url',)
     url = ['url']
-    actions = [update_price]
+    actions = [update_price, compute_keywords]
     
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Feed, FeedAdmin)

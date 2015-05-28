@@ -12,6 +12,7 @@ class Article(models.Model):
     content_text = models.TextField();
     public_date = models.DateTimeField('date published', default=datetime.now, blank=True);
     img_url = models.TextField(blank=True);
+    feed_id = models.IntegerField()
     
     def __str__(self):              
         return self.title_text
