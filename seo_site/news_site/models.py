@@ -8,7 +8,7 @@ from datetime import datetime
 class Article(models.Model):
     url = models.TextField();
     title_text = models.CharField(max_length=200);
-    description_text = models.CharField(max_length=200);
+    description_text = models.TextField();
     content_text = models.TextField();
     public_date = models.DateTimeField('date published', default=datetime.now, blank=True);
     img_url = models.TextField(blank=True);

@@ -15,7 +15,8 @@ def update_price(modeladmin, request, queryset):
     for feed in queryset:
         articles = feedparser.parse(feed.url)
 
-        for article in articles:
+        for x in range(0, len(articles), 1):
+            article = articles[x]
             g = Goose()
             g_article = g.extract(article.url)
             article.content_text = g_article.cleaned_text
