@@ -10,6 +10,7 @@
 ## Links
 
 * [N-grams extraction](http://locallyoptimal.com/blog/2013/01/20/elegant-n-gram-generation-in-python/)
+* [Python case insensitive replace](http://stackoverflow.com/questions/919056/python-case-insensitive-replace)
 
 ## DEBUGGING with PyCharm
 
