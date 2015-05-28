@@ -28,7 +28,7 @@ update_price.short_description = 'Crawl RSS feed'
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title_text', 'description_text', 'public_date')
+    list_display = ('title_text', 'description_text', 'public_date', 'content_text', 'img_url',)
     list_filter = ['public_date']
     search_fields = ['title_text']
 
