@@ -5,6 +5,15 @@
 ```
     sudo install.sh
     scrapy crawl gnews
+    python manage.py runserver
+```
+
+## Mettre à jour la BDD
+
+Les tables de la BDD se mettent à jour en fonction des objets définient dans le fichier ```models.py```. Pour applique des motifications faites dans ce fichier  
+```
+    python manage.py makemigrations
+    python manage.py migrate
 ```
 
 ## Links
