@@ -21,6 +21,7 @@ def update_price(modeladmin, request, queryset):
 
 update_price.short_description = 'Crawl RSS feed'
 
+
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('title_text', 'description_text', 'public_date')
     list_filter = ['public_date']
