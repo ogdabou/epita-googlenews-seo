@@ -19,19 +19,18 @@ class stopWord:
                       "what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd",
                       "who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd",
                       "you'll","you're","you've"];
-                      
+        
+        chaine = chaine.lower();
+        wordtab = chaine.split( );
         for word in stop_world :
-            print " %s :" % chaine.split( );
-            chaine = chaine.split( );
-            if word in chaine:
-                chaine = chaine.remove(word);   
-            #chaine = chaine.replace(word, '');
-        return chaine;
+            if word in wordtab:
+                while word in wordtab: wordtab.remove(word)   
+        return wordtab;
     
 chaine = "The TreeTagger is a tool for annotating text with part-of-speech and lemma information. It was developed by Helmut Schmid in the TC project at the Institute for Computational Linguistics of the University of Stuttgart. The TreeTagger has been successfully used to tag German, English, French, Italian, Dutch, Spanish, Bulgarian, Russian, Portuguese, Galician, Chinese, Swahili, Slovak, Latin, Estonian, Polish and old French texts and is adaptable to other languages if a lexicon and a manually tagged training corpus are available. ";
 test_stop_word = stopWord();
 chaine = test_stop_word.stop_little_words(chaine);
-print "chaine %s :" % chaine;
+print "%s :" % chaine;
     
         
     
