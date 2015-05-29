@@ -14,6 +14,25 @@ sudo python setup.py install
 cd ..
 sudo rm -rf feedparser
 
+# PIP INSTALL
 sudo apt-get install python-pip
 
+# DJANGO INSTALL
 sudo pip install Django
+
+# GOOSE EXTRACTOR INSTALL
+wget https://pypi.python.org/packages/source/g/goose-extractor/goose-extractor-1.0.25.tar.gz
+tar -xvf goose-extractor-1.0.25.tar.gz
+cd goose-extractor-1.0.25
+sudo python setup.py install
+
+# NLTK DATA DOWNLOAD
+sudo mkdir /usr/share/nltk_data
+sudo python -m nltk.downloader -d /usr/share/nltk_data all
+
+
+#install goose, feedparser, ntlk, goose-extractor
+pip install feedparser
+pip install nltk
+pip install goose-extractor
+pip install beautifulsoup

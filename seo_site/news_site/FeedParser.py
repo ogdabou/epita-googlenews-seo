@@ -8,8 +8,13 @@ class FeedParser(HTMLParser):
         self.reset()
         self.fed = []
 
+    def resetData(self):
+        self.reset()
+        self.fed = []
+
     def handle_data(self, d):
         self.fed.append(d)
+
     def get_data(self):
         return u' '.join(self.fed)
 
@@ -27,5 +32,6 @@ class FeedParser(HTMLParser):
         return articles
 
     def cleanhtml(self, html):
+        self.resetData()
         self.feed(html)
         return self.get_data()
