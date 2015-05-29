@@ -3,9 +3,10 @@ from __future__ import division
 from .models import Article
 from .stopword import stopWord
 from .NGram import NGram
+import Lemmatizer
 from nltk.stem import WordNetLemmatizer
 from nltk.tag import pos_tag
-from nltk.tag import pos_tag
+
 
 import math
 
@@ -17,24 +18,16 @@ class KeyWordsProcessor():
         ngramprocessor = NGram()
         articles = Article.objects.filter(feed_id=feed.id)
         stopWordProcessor = stopWord()
-        wnl = WordNetLemmatizer()
-
         articles_ngrams_list = []
         lemmatized_articles = []
         for article in articles:
             # stop word
             cleaned = stopWordProcessor.stop_little_words(article.description_text)
+            clean_content = stopWordProcessor.stop_little_words(article.content_text)
 
             # lemm
 
-            taggedWords = pos_tag(cleaned.split(" "))
-            lems = []
-
-            # Tagged word form ( "word" , "NNP") but wordnet tags needed
-            for taggedWord in taggedWords:
-                pos = penn_to_wn(taggedWord[1])
-                if pos is not None:
-                    lems.append(wnl.lemmatize(taggedWord[0], pos))
+            lems = Lemmatizer.lemmatize(cleaned.split(" "))
 
             article.lemmatized_description = " ".join(lems)
             # n grams

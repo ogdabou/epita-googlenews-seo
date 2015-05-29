@@ -2,6 +2,21 @@ __author__ = 'ogdabou'
 
 import math
 from nltk.corpus import wordnet as wn
+from nltk.stem import WordNetLemmatizer
+from nltk.tag import pos_tag
+
+wnl = WordNetLemmatizer()
+
+# lemmatize a list of words
+def lemmatize(words):
+    taggedWords = pos_tag(words)
+    lems = []
+    for taggedWord in taggedWords:
+            pos = penn_to_wn(taggedWord[1])
+            if pos is not None:
+                lems.append(wnl.lemmatize(taggedWord[0], pos))
+    return lems
+
 
 def is_noun(tag):
     return tag in ['NN', 'NNS', 'NNP', 'NNPS']
