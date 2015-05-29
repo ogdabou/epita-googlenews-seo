@@ -32,7 +32,8 @@ update_price.short_description = 'Crawl RSS feed'
 def compute_keywords(modeladmin, request, feeds):
     keyWordsProcessor = KeyWordsProcessor()
     for feed in feeds:
-        keyWordsProcessor.process(feed)
+        feed.keywords = keyWordsProcessor.process(feed)
+        feed.save()
 
 compute_keywords.short_description = 'Compute keywords on feed clusters'
 
@@ -43,7 +44,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class FeedAdmin(admin.ModelAdmin):
-    list_display = ('id', 'url',)
+    list_display = ('id', 'url', 'keywords')
     url = ['url']
     actions = [update_price, compute_keywords]
     
