@@ -26,3 +26,9 @@ class Article(models.Model):
 class Feed(models.Model):
     url = models.CharField(max_length=200)
     keywords = models.TextField(blank=True)
+    keywords = models.TextField(blank=True)
+
+class Request(models.Model):
+    request = models.CharField(max_length=50)
+    corrected_request = models.CharField(max_length=50, blank=True)
+    results = models.TextField(blank=True)
