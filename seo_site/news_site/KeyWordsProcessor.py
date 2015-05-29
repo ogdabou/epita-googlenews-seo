@@ -16,16 +16,6 @@ class KeyWordsProcessor():
     ngramprocessor = NGram()
     stopWordProcessor = stopWord()
 
-    def processDescriptions(self, feed):
-        articles = Article.objects.filter(feed_id=feed.id)
-        articles_ngrams_list = []
-
-        cleaned = self.stopWordProcessor.stop_little_words(article.description_text)
-        lems = Lemmatizer.lemmatize(cleaned.split(" "))
-        article.description_ngrams = self.ngramprocessor.computeNGrams(lems, 2)
-        articles_ngrams_list.append(article.description_ngrams)
-        article.save()
-
     def process(self, feed):
         articles = Article.objects.filter(feed_id=feed.id)
 
