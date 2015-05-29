@@ -1,4 +1,4 @@
-__author__ = 'ogdabou'
+from __future__ import division
 
 from .models import Article
 from .stopword import stopWord
@@ -6,6 +6,7 @@ from .NGram import NGram
 from nltk.stem import WordNetLemmatizer
 from nltk.tag import pos_tag
 from nltk.tag import pos_tag
+
 import math
 
 from .Lemmatizer import penn_to_wn
@@ -49,12 +50,21 @@ class KeyWordsProcessor():
         tf_idfs = []
         for article in articles:
             tf_idf_description_words = []
+
+            # compute number of occurence of most used term
+            maxOccurenceInDocument = 0
             for ngram in article.description_ngrams:
-                tf_idf = tfidf(ngram, article.description_ngrams, articles_ngrams_list)
+                if article.description_ngrams.count(ngram) > maxOccurenceInDocument:
+                    maxOccurenceInDocument = article.description_ngrams.count(ngram)
+
+            for ngram in article.description_ngrams:
+
+                tf_idf = tfidf(ngram, article.description_ngrams, articles_ngrams_list, maxOccurenceInDocument)
+
                 print (ngram, tf_idf)
                 if not any(ngram in ngram_tf_tuple for ngram_tf_tuple in tf_idfs) and tf_idf != 0.0:
                     tf_idfs.append((ngram, tf_idf))
-                    tf_idf_description_words.append(tf_idfs)
+                    tf_idf_description_words.append((ngram, tf_idf))
             article.tf_idf_description_words = tf_idf_description_words
             article.save()
 
@@ -64,17 +74,21 @@ class KeyWordsProcessor():
         keywords = []
 
 
-        # les meilleurs keywords
+def TermFrequencyInDocument(term, document, maxOccurenceInDocument):
+    return float(float(document.count(term)) / float(maxOccurenceInDocument))
 
+# documents are made of ngrams
+def InverseDocumentFrequency(term, documents):
+    number_of_documents_with_term = 0
+    for document in documents:
+        if term in document:
+            number_of_documents_with_term += 1
 
-def tf(ngram, text_ngrams):
-    return text_ngrams.count(ngram) / len(ngram)
+    idf = math.log(len(documents) / number_of_documents_with_term) + 1
+    return idf
 
-def n_containing(ngram, text_ngrams_list):
-    return sum(1 for text_ngrams in text_ngrams_list if ngram in text_ngrams)
+def tfidf(term, document, documents, maxOccurenceInDocument):
+    result = TermFrequencyInDocument(term, document, maxOccurenceInDocument) * InverseDocumentFrequency(term, documents)
+    print "tfidf ",result, " = ", TermFrequencyInDocument(term, document, maxOccurenceInDocument), " * " , InverseDocumentFrequency(term, documents)
+    return result
 
-def idf(ngram, text_ngrams_list):
-    return math.log(len(text_ngrams_list) / (1 + n_containing(ngram, text_ngrams_list)))
-
-def tfidf(ngram, text_ngrams, text_ngrams_list):
-    return tf(ngram, text_ngrams) * idf(ngram, text_ngrams_list)

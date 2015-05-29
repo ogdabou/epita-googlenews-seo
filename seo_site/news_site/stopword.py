@@ -20,13 +20,21 @@ class stopWord:
                      "they'd","they'll","they're","they've","wasn't","we'd","we'll","we're","weren't",
                      "what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd",
                      "who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd",
-                     "you'll","you're","you've"];
+                     "you'll","you're","you've", ]
+
+        stop_punct = [ ".", "'", "`", "\"", "[", "]", "(", ")", "{", "}", "(", ")", "!", "?", ";", ",", ]
 
         words = word_tokenize(chaine)
         for word in stop_word:
             if word in chaine:
                 #chaine = chaine.remove(word);
-                chaine = chaine.replace(" " + word + " ", "")
+                chaine = chaine.replace(" " + word + " ", " ")
+
+        for punct in stop_punct:
+            if punct in chaine:
+                #chaine = chaine.remove(word);
+                chaine = chaine.replace(punct + " ", " ")
+
         return chaine;
     
 #chaine = "The TreeTagger is a tool for annotating text with part-of-speech and lemma information. It was developed by Helmut Schmid in the TC project at the Institute for Computational Linguistics of the University of Stuttgart. The TreeTagger has been successfully used to tag German, English, French, Italian, Dutch, Spanish, Bulgarian, Russian, Portuguese, Galician, Chinese, Swahili, Slovak, Latin, Estonian, Polish and old French texts and is adaptable to other languages if a lexicon and a manually tagged training corpus are available. ";

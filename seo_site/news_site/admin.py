@@ -25,7 +25,6 @@ def update_price(modeladmin, request, queryset):
             if g_article.top_image is not None:
                 article.img_url = g_article.top_image.src
             article.save()
-            ngram.computeNGrams(article.description_text, 2)
         modeladmin.message_user(request, ("Successfully crawled %d / %d feeds") % (len(queryset), len(articles)), messages.SUCCESS)
 
 update_price.short_description = 'Crawl RSS feed'
