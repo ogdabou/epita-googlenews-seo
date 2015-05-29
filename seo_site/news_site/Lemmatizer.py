@@ -1,5 +1,6 @@
 __author__ = 'ogdabou'
 
+import math
 from nltk.corpus import wordnet as wn
 
 def is_noun(tag):

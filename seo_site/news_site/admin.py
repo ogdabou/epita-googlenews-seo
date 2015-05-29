@@ -38,7 +38,7 @@ def compute_keywords(modeladmin, request, feeds):
 compute_keywords.short_description = 'Compute keywords on feed clusters'
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('feed_id', 'title_text', 'description_text', 'public_date', 'content_text', 'img_url',)
+    list_display = ('feed_id', 'title_text', 'description_text', 'content_text', 'lemmatized_text', 'tf_idf_description_words', 'lemmatized_description',)
     list_filter = ['public_date']
     search_fields = ['title_text']
 
