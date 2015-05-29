@@ -1,4 +1,6 @@
 .idea
+goose-extractor*
 *.pyc
 seo_site/nltk_data
 feedparser
+

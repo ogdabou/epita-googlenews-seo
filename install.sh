@@ -25,14 +25,15 @@ wget https://pypi.python.org/packages/source/g/goose-extractor/goose-extractor-1
 tar -xvf goose-extractor-1.0.25.tar.gz
 cd goose-extractor-1.0.25
 sudo python setup.py install
-
-# NLTK DATA DOWNLOAD
-sudo mkdir /usr/share/nltk_data
-sudo python -m nltk.downloader -d /usr/share/nltk_data all
-
+cd ..
 
 #install goose, feedparser, ntlk, goose-extractor
 pip install feedparser
 pip install nltk
 pip install goose-extractor
 pip install beautifulsoup
+
+# NLTK DATA DOWNLOAD
+sudo mkdir seo_site/nltk_data
+sudo python -m nltk.downloader -d seo_site/nltk_data maxent_treebank_pos_tagger punkt wordnet
+

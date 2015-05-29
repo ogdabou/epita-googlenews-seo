@@ -25,3 +25,4 @@ class Article(models.Model):
 
 class Feed(models.Model):
     url = models.CharField(max_length=200)
+    keywords = models.TextField(blank=True)
