@@ -37,3 +37,5 @@ pip install beautifulsoup
 sudo mkdir seo_site/nltk_data
 sudo python -m nltk.downloader -d seo_site/nltk_data maxent_treebank_pos_tagger punkt wordnet
 
+# create django superuser
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'root')" | python seo_site/manage.py shell
