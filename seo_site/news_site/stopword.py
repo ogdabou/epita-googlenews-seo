@@ -37,10 +37,6 @@ class stopWord:
 
         return chaine;
     
-#chaine = "The TreeTagger is a tool for annotating text with part-of-speech and lemma information. It was developed by Helmut Schmid in the TC project at the Institute for Computational Linguistics of the University of Stuttgart. The TreeTagger has been successfully used to tag German, English, French, Italian, Dutch, Spanish, Bulgarian, Russian, Portuguese, Galician, Chinese, Swahili, Slovak, Latin, Estonian, Polish and old French texts and is adaptable to other languages if a lexicon and a manually tagged training corpus are available. ";
-#test_stop_word = stopWord();
-#chaine = test_stop_word.stop_little_words(chaine);
-#print "chaine %s :" % chaine;
     
         
     
