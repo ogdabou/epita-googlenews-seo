@@ -45,10 +45,12 @@ class KeyWordsProcessor():
             article.save()
 
         print "#######################"
+        # removing doublons
+        tf_idfs = list(set(tf_idfs))
         ngrams_sorted_by_tf_idf = sorted(tf_idfs, key=lambda tup: tup[1], reverse=True)
 
-        # removing doublons
-        return list(set(ngrams_sorted_by_tf_idf))
+
+        return ngrams_sorted_by_tf_idf
 
     # compute list of ngrams tf-idf on a document
     def tf_idfs(self, document, corpus):
