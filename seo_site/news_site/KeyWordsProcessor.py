@@ -13,27 +13,34 @@ import math
 from .Lemmatizer import penn_to_wn
 
 class KeyWordsProcessor():
+    ngramprocessor = NGram()
+    stopWordProcessor = stopWord()
+
+    def processDescriptions(self, feed):
+        articles = Article.objects.filter(feed_id=feed.id)
+        articles_ngrams_list = []
+
+        cleaned = self.stopWordProcessor.stop_little_words(article.description_text)
+        lems = Lemmatizer.lemmatize(cleaned.split(" "))
+        article.description_ngrams = self.ngramprocessor.computeNGrams(lems, 2)
+        articles_ngrams_list.append(article.description_ngrams)
+        article.save()
 
     def process(self, feed):
-        ngramprocessor = NGram()
         articles = Article.objects.filter(feed_id=feed.id)
-        stopWordProcessor = stopWord()
+
         articles_ngrams_list = []
-        lemmatized_articles = []
         for article in articles:
             # stop word
-            cleaned = stopWordProcessor.stop_little_words(article.description_text)
-            clean_content = stopWordProcessor.stop_little_words(article.content_text)
+            cleaned = self.stopWordProcessor.stop_little_words(article.description_text)
 
             # lemm
-
             lems = Lemmatizer.lemmatize(cleaned.split(" "))
-
             article.lemmatized_description = " ".join(lems)
+
             # n grams
-            article.description_ngrams = ngramprocessor.computeNGrams(lems, 2)
+            article.description_ngrams = self.ngramprocessor.computeNGrams(lems, 2)
             articles_ngrams_list.append(article.description_ngrams)
-            article.lemmatized_description = lems
             article.save()
 
         # tf-idf des n-grams
@@ -42,29 +49,36 @@ class KeyWordsProcessor():
 
         tf_idfs = []
         for article in articles:
-            tf_idf_description_words = []
-
-            # compute number of occurence of most used term
-            maxOccurenceInDocument = 0
-            for ngram in article.description_ngrams:
-                if article.description_ngrams.count(ngram) > maxOccurenceInDocument:
-                    maxOccurenceInDocument = article.description_ngrams.count(ngram)
-
-            for ngram in article.description_ngrams:
-
-                tf_idf = tfidf(ngram, article.description_ngrams, articles_ngrams_list, maxOccurenceInDocument)
-
-                print (ngram, tf_idf)
-                if not any(ngram in ngram_tf_tuple for ngram_tf_tuple in tf_idfs) and tf_idf != 0.0:
-                    tf_idfs.append((ngram, tf_idf))
-                    tf_idf_description_words.append((ngram, tf_idf))
-            article.tf_idf_description_words = tf_idf_description_words
+            description_tfidf_list = self.tf_idfs(article.description_ngrams, articles_ngrams_list)
+            article.tf_idf_description_words = description_tfidf_list
+            tf_idfs += description_tfidf_list
             article.save()
 
         print "#######################"
         ngrams_sorted_by_tf_idf = sorted(tf_idfs, key=lambda tup: tup[1], reverse=True)
         print ngrams_sorted_by_tf_idf
         keywords = []
+
+    # compute list of ngrams tf-idf on a document
+    def tf_idfs(self, document, corpus):
+        tfidf_list = []
+        maxOccurence = None
+        for ngram in document:
+            if maxOccurence is None:
+                maxOccurence = self.maxOccurence(document)
+            tfidf_value = tfidf(ngram, document, corpus, maxOccurence)
+            if tfidf_value not in tfidf_list and tfidf_value != 0.0:
+                tfidf_list.append((ngram, tfidf_value))
+            print (ngram, tfidf_value)
+        return tfidf_list
+
+    # document is a list of n-grams
+    def maxOccurence(self, document):
+        maxOcurrence = 0;
+        for ngram in document:
+            if document.count(ngram) > maxOcurrence:
+                maxOcurrence = document.count(ngram)
+        return maxOcurrence
 
 
 def TermFrequencyInDocument(term, document, maxOccurenceInDocument):
