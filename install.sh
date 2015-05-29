@@ -29,3 +29,10 @@ sudo python setup.py install
 # NLTK DATA DOWNLOAD
 sudo mkdir /usr/share/nltk_data
 sudo python -m nltk.downloader -d /usr/share/nltk_data all
+
+
+#install goose, feedparser, ntlk, goose-extractor
+pip install feedparser
+pip install nltk
+pip install goose-extractor
+pip install beautifulsoup
