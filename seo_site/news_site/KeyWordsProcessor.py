@@ -52,6 +52,44 @@ class KeyWordsProcessor():
 
         return ngrams_sorted_by_tf_idf
 
+    def process_content(self):
+        articles = Article.objects.all()
+
+        articles_ngrams_list = []
+        for article in articles:
+            if article.content_text is not None and article.content_text != "":
+                # stop word
+                cleaned = self.stopWordProcessor.stop_little_words(article.content_text)
+
+                # lemm
+                lems = Lemmatizer.lemmatize(cleaned.split(" "))
+                article.lemmatized_text = " ".join(lems)
+
+
+                # n grams
+                article.content_ngrams = self.ngramprocessor.computeNGrams(lems, 1)
+                articles_ngrams_list.append(article.content_ngrams)
+                article.save()
+
+        # tf-idf des n-grams
+        # can be optimized : do not compute for a already-computed ngram
+        print "computing tf*idf"
+
+        tf_idfs = []
+        for article in articles:
+            if article.content_ngrams is not None and article.content_ngrams != "":
+                description_tfidf_list = self.tf_idfs(article.content_ngrams, articles_ngrams_list)
+                article.tf_idf_text_words = description_tfidf_list
+                tf_idfs += description_tfidf_list
+                article.save()
+                print article.tf_idf_text_words
+
+        print "#######################"
+        ngrams_sorted_by_tf_idf = sorted(tf_idfs, key=lambda tup: tup[1], reverse=True)
+
+        # removing doublons
+        return list(set(ngrams_sorted_by_tf_idf))
+
     # compute list of ngrams tf-idf on a document
     def tf_idfs(self, document, corpus):
         tfidf_list = []

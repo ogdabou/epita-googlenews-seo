@@ -26,6 +26,13 @@ class Article(models.Model):
 class Feed(models.Model):
     url = models.CharField(max_length=200)
     keywords = models.TextField(blank=True)
-    
+
     def __str__(self):              
         return self.keywords
+
+
+class Request(models.Model):
+    request = models.CharField(max_length=50)
+    corrected_request = models.CharField(max_length=50, blank=True)
+    results = models.TextField(blank=True)
+
