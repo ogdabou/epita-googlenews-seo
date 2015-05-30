@@ -18,7 +18,7 @@ sudo rm -rf feedparser
 sudo apt-get install python-pip
 
 # DJANGO INSTALL
-sudo pip install Django
+sudo pip install -U Django
 
 # GOOSE EXTRACTOR INSTALL
 wget https://pypi.python.org/packages/source/g/goose-extractor/goose-extractor-1.0.25.tar.gz
