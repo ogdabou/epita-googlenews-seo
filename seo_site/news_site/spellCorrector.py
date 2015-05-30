@@ -1,7 +1,7 @@
 __author__ = 'Marfa'
 
 import re, collections
-
+import os
 def words(text): return re.findall('[a-z]+', text.lower())
 
 def train(features):
@@ -10,7 +10,7 @@ def train(features):
         model[f] += 1
     return model
 
-NWORDS = train(words(file('big.txt').read()))
+NWORDS = train(words(file(os.path.dirname(os.path.realpath(__file__)) + "/big.txt").read()))
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
@@ -30,9 +30,3 @@ def known(words): return set(w for w in words if w in NWORDS)
 def correct(word):
     candidates = known([word]) or known(edits1(word)) or known_edits2(word) or [word]
     return max(candidates, key=NWORDS.get)
-
-
-#Test to remove later
-print "helo => " + correct("helo")
-print "kat => " + correct("kat")
-print "korection => " + correct("korection")
