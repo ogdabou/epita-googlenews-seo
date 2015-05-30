@@ -31,9 +31,10 @@ cd ..
 pip install feedparser
 pip install nltk
 pip install goose-extractor
+pip install beautifulsoup
 
 # create django superuser
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'root')" | python seo_site/manage.py shellip install beautifulsoup
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'root')" | python seo_site/manage.py shell
 
 # NLTK DATA DOWNLOAD
 sudo mkdir seo_site/nltk_data

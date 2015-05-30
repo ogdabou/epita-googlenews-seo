@@ -1,6 +1,6 @@
 from .models import Request, Article
+from stopword import stopWord
 import spellCorrector
-import  stopword
 
 __author__ = 'Lenjyco'
 class Cooccurrence():
@@ -13,8 +13,8 @@ class Cooccurrence():
             for word in request.request.split(" "):
                 corrected_request.append(spellCorrector.correct(word))
                 print corrected_request
-            stopword = stopword()
-            stopword.stop_little_words(corrected_request)
+            stopword = stopWord()
+            stopword.stop_little_words(u" ".join(corrected_request))
             request.corrected_request = corrected_request
             request.save()
 

@@ -31,7 +31,7 @@ def crawl_feeds(modeladmin, request, queryset):
                 if g_article.top_image is not None:
                     article.img_url = g_article.top_image.src
                 article.save()
-        modeladmin.message_user(request, ("Successfully crawled %d / %d feeds") % (len(queryset), len(articles)), messages.SUCCESS)
+        modeladmin.message_user(request, ("Successfully crawled %d feeds and %d articles") % (len(queryset), len(articles)), messages.SUCCESS)
 
 crawl_feeds.short_description = 'Crawl RSS feed'
 
