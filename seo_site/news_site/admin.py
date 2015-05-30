@@ -1,8 +1,10 @@
 from django.contrib import admin
-
+#from django.utils.html import format_html_join
+#from django.utils.safestring import mark_safe
 from django.contrib import messages
-from .forms import FeedForm
+#from .forms import FeedForm
 from .models import Article, Feed
+from django.http import HttpResponse
 from .FeedParser import FeedParser
 from .KeyWordsProcessor import KeyWordsProcessor
 from .NGram import NGram
@@ -37,16 +39,52 @@ def compute_keywords(modeladmin, request, feeds):
 
 compute_keywords.short_description = 'Compute keywords on feed clusters'
 
+
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('feed_id', 'title_text', 'description_text', 'content_text', 'lemmatized_text', 'tf_idf_description_words', 'lemmatized_description',)
+    fieldsets = (
+        (None, {
+            'fields': ('title_text', 'description_text', 
+                'content_text', 'public_date','feed_id')})),
+    list_display = ('feed_id', 'title_text', 'description_text',
+                     'content_text', 'lemmatized_text', 'tf_idf_description_words', 
+                     'lemmatized_description',)
     list_filter = ['public_date']
     search_fields = ['title_text']
-
-
+    #readony_field = ('feed_keywords')
+    
+    #def feed_keywords(self,Feed):
+     #   return format_html_join(
+      #      mark_safe('<br/>'),
+       #     '{}',
+        #    ((line,) for line in Feed.objects.all()[:5]),
+        #)or "<span class='errors'>I can't determine this address.</span>" 
+         # short_description functions like a model field's verbose_name
+    #feed_keywords.short_description = "keywords"
+         # in this example, we have used HTML tags in the output
+    #feed_keywords.allow_tags = True
+    
+def export_csv(modeladmin, request, queryset):
+        import csv
+        from django.utils.encoding import smart_str
+        response = HttpResponse()
+        response['Content-Disposition'] = 'attachment; filename=mymodel.csv'
+        writer = csv.writer(response, csv.excel)
+        response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+        writer.writerow([
+            smart_str("Keywords"),
+        ])
+        for obj in queryset:
+            writer.writerow([
+                smart_str(obj.keywords),
+            ])
+        return response
+export_csv.short_description = u"Export CSV"     
+        
 class FeedAdmin(admin.ModelAdmin):
     list_display = ('id', 'url', 'keywords')
     url = ['url']
-    actions = [update_price, compute_keywords]
+    actions = [update_price, compute_keywords, export_csv]
+    
     
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Feed, FeedAdmin)
