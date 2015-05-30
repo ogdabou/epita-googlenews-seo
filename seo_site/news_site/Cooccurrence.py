@@ -14,54 +14,57 @@ class Cooccurrence():
                 print corrected_request
             request.corrected_request = corrected_request
             request.save()
-        self.compute(articles, corrected_request)
+
+            for article in articles:
+                if article.content_ngrams is not None and article.content_ngrams !="":
+                    article.content_ngrams = eval(article.content_ngrams)
+                    article.tf_idf_text_words = eval(article.tf_idf_text_words)
+            request.results = self.compute(articles, corrected_request)
+            request.save()
 
 
     def compute(self, articles, request):
         usefull_words = self.PickUsefullWord(request, articles)
-        print usefull_words
         counts_request = self.CountRW(request,articles)
         i = 0
         counts_use_request=[]
         highscore_usefulls =[]
-        hgscore_word = []
-        hgscore_words = []
         for word in usefull_words:
             count_usefull = self.CountUW(word, articles)
-
+            i = 0
             for word_request in request:
-                print self.CountUsefullWordRequestWord(word, word_request, articles)
-                counts_use_request.append(self.CountUsefullWordRequestWord(word, word_request, articles))
-                highscore_usefulls.append(self.Dice(count_usefull,counts_request[i],counts_use_request[i]))
-                hgscore_word.append(word + word_request)
-                hgscore_word.append(highscore_usefulls[i])
-                #highscore_usefulls.sort(reverse=True)
-            hgscore_words.append(hgscore_word)
-        return self.compute_request_usefull(hgscore_words, request)
+                counts_use_request.append(self.CountUsefullWordRequestWord(word[0][0], word_request, articles))
+                highscore_usefulls.append(((word[0][0], word_request), self.Dice(count_usefull, counts_request[i], counts_use_request[i])))
+                i += 1
+        return self.compute_request_usefull(highscore_usefulls, request)
 
     def compute_request_usefull(self, hgscore_usefull, request):
+        list_max_dice=[]
+        max = 0
         for usefull_words in hgscore_usefull:
-            print request
-            print "OOOOOOOOOOOOOOOOOOOOOOOOOO"
-            print usefull_words[0]
+            if max < usefull_words[1]:
+                max = usefull_words[1]
+                list_max_dice = []
+                list_max_dice.append(usefull_words)
+            elif max == usefull_words[1]:
+                list_max_dice.append(usefull_words)
+        return list_max_dice
 
     def PickUsefullWord(self, request, articles):
         tf_idfs=[]
-        print len(articles)
         for article in articles:
             for word in request:
                 if word in article.content_text:
                     for tf_idf in article.tf_idf_text_words:
-                        print article.tf_idf_text_words
                         if tf_idf not in tf_idfs:
-                            tf_idfs.append(article.tf_idf_text_words)
-        tf_idfs.sort(reverse=True)
+                            tf_idfs.append(tf_idf)
+        tf_idfs = sorted(tf_idfs, key=lambda tup: tup[1], reverse=True)
         return tf_idfs[:20]
 
     def CountUW(self, use_word, articles):
+        count = 0
         for article in articles:
-            count = 0
-            if article.content_text.count(use_word) != 0:
+            if article.lemmatized_text.count(use_word[0][0]) != 0:
                 count = count + 1
         return count
 
@@ -70,7 +73,7 @@ class Cooccurrence():
         for word in request:
             count = 0
             for article in articles:
-                if article.content_text.count(word) != 0:
+                if article.lemmatized_text.count(word) != 0:
                     count = count + 1
             counts.append(count)
         return counts
@@ -78,12 +81,12 @@ class Cooccurrence():
     def CountUsefullWordRequestWord(self, use_word, request_word, articles):
         count = 0
         for article in articles:
-            if article.content_text.count(use_word) != 0 and article.content_text.count(request_word):
-                count = count + 1
+            if article.lemmatized_text.count(use_word) != 0 and article.lemmatized_text.count(request_word) != 0:
+                    count = count + 1
         return count
 
     def Dice(self, count_usefull, count_request, count_use_request):
-        return float(count_use_request / (count_usefull + count_request))
+        return float(float(count_use_request) / (float(count_usefull) + float(count_request)))
 
 
 
